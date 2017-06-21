@@ -2,10 +2,9 @@
 @{
     ViewData["Title"] = "Start Tracking";
 }
-
-<div class="row">
-    <h2>Create</h2>
-    <h4>Search or Start Tracking</h4>
+<div class="search center-box vertical-center">
+    <h1>Create</h1>
+    <h2>Search or Start Tracking</h2>
     <p>
         If the user you search is in our tracking database, you'll be taken to the results.
         If not, we'll grab the latest data and start tracking every day.
@@ -15,37 +14,27 @@
         <div class="text-danger">@ViewData["AccResponse"]</div>
     }
 
-    <form asp-controller="Track" asp-action="Create" method="post" class="form-horizontal">
+    <form asp-controller="Track" asp-action="Create" method="post">
         <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Username" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label asp-for="Network" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="Network" class="form-control">
-                    @foreach (var Item in (List<string>)ViewData["NetworkOptions"])
-                    {
-                        <option value="@Item">@Item</option>
-                    }
-                </select>
-                <span asp-validation-for="Network" class="text-danger"></span>
-            </div>
-        </div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-default">Track / Search</button>
-            </div>
-        </div>
+        <label asp-for="Network"></label>
+        <select asp-for="Network">
+            @foreach (var Item in (List<string>)ViewData["NetworkOptions"])
+            {
+                <option value="@Item">@Item</option>
+            }
+        </select>
+
+        <span asp-validation-for="Network" class="text-danger"></span>
+
+        <input type="submit" value="Track / Search">
     </form>
 </div>
 
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
+    @section Scripts {
+        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    }
