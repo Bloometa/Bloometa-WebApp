@@ -99,7 +99,7 @@ b {
 
 /* [==] FONTS [==]*/
 
-@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900');
+/*@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900');*/
 
 /*
  * [==] General [==]
@@ -257,8 +257,8 @@ table {
         font-weight: 500;
     }
 
-    table td {
-    }
+    /*table td {
+    }*/
 
     table a {
         display: inline-block;
@@ -291,5 +291,5 @@ table {
     margin-bottom: 22px;
 }
 
-@media only screen and (min-device-width: 320px) and (max-width: 768px) {
-}
+/*@media only screen and (min-device-width: 320px) and (max-width: 768px) {
+}*/
