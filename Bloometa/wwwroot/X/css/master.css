@@ -1,0 +1,79 @@
+/* www.alsina.xyz | Alchemically bonded by Sebastian Alsina (@youngseebi) */
+
+* {
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
+.clear {
+    clear: both;
+}
+
+textarea,
+input {
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+
+textarea:focus,
+input:focus {
+    outline: none;
+}
+
+a {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+b {
+    font-weight: 900 !important;
+}
+
+.contain {
+    max-width: 960px;
+    width: 85%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.vertical-center {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.split-2,
+.split-3,
+.split-4 {
+    height: 100%;
+    float: left;
+}
+
+.split-2 {
+    width: 50%;
+}
+
+.split-3 {
+    width: 33.33%;
+}
+
+.split-4 {
+    width: 25%;
+}
+
+.credit-sticker {
+    max-width: 200px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-width: 768px) {
+    .split-2,
+    .split-3,
+    .split-4 {
+        width: 100% !important;
+        height: auto !important;
+        float: none !important;
+    }
+}

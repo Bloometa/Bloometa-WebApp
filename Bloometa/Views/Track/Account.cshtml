@@ -1,0 +1,95 @@
+@model Bloometa.Models.TrackViewModels.AccountViewModel
+@{
+    ViewData["Title"] = $"Tracking: {Model.AccDetails.Username}";
+}
+
+<div class="row">
+    <h2>Account: @Model.AccDetails.Username</h2>
+    <b>Latest</b>: @Model.Reporting[0].FollowerCount.ToString("N") Followers,
+    @Model.Reporting[0].FollowCount.ToString("N") Following.
+    <br />
+    Test: @{
+        foreach (int Item in Model.ReportingFollowers)
+        {
+            <text>@Item, </text>
+        }
+    }
+    <br />
+    <canvas id="track--followers--diff-graph" width="1170" height="300"></canvas>
+    <script type="text/javascript">
+        var followerDiffGraphEl = document.getElementById("track--followers--diff-graph");
+        var followerDiffGraph = new Chart(followerDiffGraphEl, {
+            type: "line",
+            data: {
+                labels: [@{
+                    foreach (DateTime Item in Model.ReportingDays)
+                    {
+                        <text>"@Item.ToString("MMMM dd")",</text>
+                    }
+                }],
+                datasets: [
+                    {
+                        label: "Following",
+                        borderColor: "rgba(255, 0, 0, 0.4)",
+                        backgroundColor: "rgba(255, 0, 0, 0)",
+                        data: [@{
+                            foreach (int Item in Model.ReportingFollowing)
+                            {
+                                <text>@Item,</text>
+                            }
+                        }]
+                    },
+                    {
+                        label: "Followers",
+                        borderColor: "rgba(0, 128, 0, 0.4)",
+                        backgroundColor: "rgba(0, 128, 0, 0.0)",
+                        data: [@{
+                            foreach (int Item in Model.ReportingFollowers)
+                            {
+                                <text>@Item,</text>
+                            }
+                        }]
+                    }
+                ]
+            },
+            options: {
+                //maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: "Followers vs Following"
+                },
+                legend: {
+                    display: true
+                },
+                scales: {
+                    yAxes: [{
+                        stacked: false,
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ran at</th>
+                <th>Follow Count</th>
+                <th>Follower Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (UData Item in Model.Reporting)
+            {
+                <tr>
+                    <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
+                    <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
+                    <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

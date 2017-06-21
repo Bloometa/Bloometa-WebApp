@@ -1,0 +1,56 @@
+/* www.alsina.xyz | Alchemically bonded by Sebastian Alsina (@youngseebi) */
+
+/* [==] COLORS [==]
+ * 1:
+ * 2:
+ * 3:
+ * 4:
+*/
+
+
+/* [==] FONTS [==]*/
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,500,900');
+
+
+/*
+ * [==] General [==]
+*/
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    color: #222222;
+    font-family: 'Lato', sans-serif;
+}
+
+a {
+    color: cornflowerblue;
+}
+
+.center-box {
+    margin: auto;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 100;
+    padding: 22px;
+    overflow-y: auto;
+    text-align: center;
+}
+
+.result i {
+    font-size: 4em;
+    margin-bottom: 22px;
+}
+
+.result h1 {
+    font-size: 1.5em;
+    font-size: 100;
+    line-height: 1.5em;
+    margin-bottom: 22px;
+}
+
+
+@media only screen and (min-device-width: 320px) and (max-width: 768px) {}
