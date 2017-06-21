@@ -4,9 +4,16 @@
 }
 
 <h1>Account: @Model.AccDetails.Username</h1>
-<b>Latest</b>:
-    @Model.Reporting[0].FollowerCount.ToString("N") Followers,
-    @Model.Reporting[0].FollowCount.ToString("N") Following.
+<p>Latest: @Model.Reporting[0].FollowerCount.ToString("N") Followers, @Model.Reporting[0].FollowCount.ToString("N") Following.</p>
+
+<!--
+<div class="latest-values">
+    <div class="value followers">789</div>
+    <div class="value following">546</div>
+    <div class="value xxx">88</div>
+    <div class="clear"></div>
+</div>
+-->
 
 <div class="graph-box">
     <canvas id="track--followers--diff-graph" style="width:100%;height:100%;"></canvas>
@@ -68,18 +75,20 @@
     </script>
 </div>
 
-<table>
-    <tr>
-        <th>Ran at</th>
-        <th>Follow Count</th>
-        <th>Follower Count</th>
-    </tr>
-    @foreach (UData Item in Model.Reporting)
-    {
+<div class="table-container">
+    <table>
         <tr>
-            <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
-            <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
-            <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+            <th>Ran at</th>
+            <th>Follow Count</th>
+            <th>Follower Count</th>
         </tr>
-    }
-</table>
+        @foreach (UData Item in Model.Reporting)
+        {
+            <tr>
+                <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
+                <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
+                <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+            </tr>
+        }
+    </table>
+</div>

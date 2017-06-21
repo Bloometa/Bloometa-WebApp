@@ -1,4 +1,4 @@
-﻿/* www.alsina.xyz | Alchemically bonded by Sebastian Alsina (@youngseebi) */
+/* www.alsina.xyz | Alchemically bonded by Sebastian Alsina (@youngseebi) */
 
 $(function () {
 
@@ -14,6 +14,12 @@ $(function () {
                 return false;
             }
         }
+    });
+    
+    // toggle nav (mobile)
+    $(".mobile-nav-btn").click(function() {
+        $(this).children("i").toggleClass("active");
+        $(".side-bar").toggleClass("mobile-hidden");
     });
 
     var disablesite = false;
