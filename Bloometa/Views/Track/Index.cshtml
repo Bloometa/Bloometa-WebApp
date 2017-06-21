@@ -1,25 +1,27 @@
-﻿@model Bloometa.Models.TrackViewModels.IndexViewModel
+@model Bloometa.Models.TrackViewModels.IndexViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Recently Added</h1>
 <h2>Latest accounts we're now tracking.</h2>
-<p>my bish is bad and boujee</p>
-<table>
-    <tr>
-        <th>Username</th>
-        <th>Network</th>
-        <th>Added</th>
-        <th></th>
-    </tr>
-    @foreach (UAccount Account in Model.Recent)
-    {
+<p><a href="/Track/Create">Click here</a> to start tracking a new account.</p>
+<div class="table-container">
+    <table>
         <tr>
-            <td>@Account.Username</td>
-            <td>@Account.Network</td>
-            <td>@Account.Added</td>
-            <td><a asp-area="" asp-controller="Track" asp-action="Account" asp-route-ID="@Account.AccID">View</a></td>
+            <th>Username</th>
+            <th>Network</th>
+            <th>Added</th>
+            <th></th>
         </tr>
-    }
-</table>
+        @foreach (UAccount Account in Model.Recent)
+        {
+            <tr>
+                <td><a asp-area="" asp-controller="Track" asp-action="Account" asp-route-ID="@Account.AccID">@Account.Username</a></td>
+                <td>@Account.Network</td>
+                <td>@Account.Added</td>
+                <td><a asp-area="" asp-controller="Track" asp-action="Account" asp-route-ID="@Account.AccID">View</a> <a href="">Pin</a> <a href="">Delete</a></td>
+            </tr>
+        }
+    </table>
+</div>

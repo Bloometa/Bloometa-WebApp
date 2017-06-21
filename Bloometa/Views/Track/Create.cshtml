@@ -15,13 +15,13 @@
     }
 
     <form asp-controller="Track" asp-action="Create" method="post">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="All"></div>
 
-        <label asp-for="Username"></label>
-        <input asp-for="Username" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<!--        <label asp-for="Username"></label>-->
+        <input asp-for="Username" placeholder="username" />
+        <span asp-validation-for="Username"></span>
 
-        <label asp-for="Network"></label>
+<!--        <label asp-for="Network"></label>-->
         <select asp-for="Network">
             @foreach (var Item in (List<string>)ViewData["NetworkOptions"])
             {
@@ -29,7 +29,7 @@
             }
         </select>
 
-        <span asp-validation-for="Network" class="text-danger"></span>
+        <span asp-validation-for="Network"></span>
 
         <input type="submit" value="Track / Search">
     </form>
