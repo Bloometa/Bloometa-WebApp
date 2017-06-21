@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Bloometa.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@*if (SignInManager.IsSignedIn(User))*@
+<div class="side-bar">
+    <div class="vertical-center">
+        <div class="logo">
+            <img src="~/images/temp-logo.svg" alt="">
+        </div>
+        <div class="nav">
+            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-area="" asp-controller="Track" asp-action="Index">Recent</a>
+            <a asp-area="" asp-controller="Track" asp-action="Create">Search</a>
+        </div>
+    </div>
+</div>

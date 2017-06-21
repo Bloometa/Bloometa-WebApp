@@ -3,30 +3,23 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="row">
-    <h2>Recently Added</h2>
-    <p>
-        Latest accounts we're now tracking.
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Network</th>
-                <th>Added</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (UAccount Account in Model.Recent)
-            {
-                <tr>
-                    <td>@Account.Username</td>
-                    <td>@Account.Network</td>
-                    <td>@Account.Added</td>
-                    <td><a asp-area="" asp-controller="Track" asp-action="Account" asp-route-ID="@Account.AccID">View</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<h1>Recently Added</h1>
+<h2>Latest accounts we're now tracking.</h2>
+<p>my bish is bad and boujee</p>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Network</th>
+        <th>Added</th>
+        <th></th>
+    </tr>
+    @foreach (UAccount Account in Model.Recent)
+    {
+        <tr>
+            <td>@Account.Username</td>
+            <td>@Account.Network</td>
+            <td>@Account.Added</td>
+            <td><a asp-area="" asp-controller="Track" asp-action="Account" asp-route-ID="@Account.AccID">View</a></td>
+        </tr>
+    }
+</table>

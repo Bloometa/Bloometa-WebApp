@@ -3,19 +3,13 @@
     ViewData["Title"] = $"Tracking: {Model.AccDetails.Username}";
 }
 
-<div class="row">
-    <h2>Account: @Model.AccDetails.Username</h2>
-    <b>Latest</b>: @Model.Reporting[0].FollowerCount.ToString("N") Followers,
+<h1>Account: @Model.AccDetails.Username</h1>
+<b>Latest</b>:
+    @Model.Reporting[0].FollowerCount.ToString("N") Followers,
     @Model.Reporting[0].FollowCount.ToString("N") Following.
-    <br />
-    Test: @{
-        foreach (int Item in Model.ReportingFollowers)
-        {
-            <text>@Item, </text>
-        }
-    }
-    <br />
-    <canvas id="track--followers--diff-graph" width="1170" height="300"></canvas>
+
+<div class="graph-box">
+    <canvas id="track--followers--diff-graph" style="width:100%;height:100%;"></canvas>
     <script type="text/javascript">
         var followerDiffGraphEl = document.getElementById("track--followers--diff-graph");
         var followerDiffGraph = new Chart(followerDiffGraphEl, {
@@ -72,24 +66,20 @@
             }
         });
     </script>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ran at</th>
-                <th>Follow Count</th>
-                <th>Follower Count</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (UData Item in Model.Reporting)
-            {
-                <tr>
-                    <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
-                    <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
-                    <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>
+
+<table>
+    <tr>
+        <th>Ran at</th>
+        <th>Follow Count</th>
+        <th>Follower Count</th>
+    </tr>
+    @foreach (UData Item in Model.Reporting)
+    {
+        <tr>
+            <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
+            <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
+            <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+        </tr>
+    }
+</table>
