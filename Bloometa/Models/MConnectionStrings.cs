@@ -15,5 +15,8 @@ namespace Bloometa.Models
 
         public string TwitterKey { get; set; }
         public string TwitterSecret { get; set; }
+
+        public string FacebookKey { get; set; }
+        public string FacebookSecret { get; set; }
     }
 }

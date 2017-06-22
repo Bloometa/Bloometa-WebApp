@@ -85,6 +85,12 @@ namespace Bloometa
                 ConsumerSecret = Configuration.GetConnectionString("TwitterSecret")
             });
 
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId = Configuration.GetConnectionString("FacebookKey"),
+                AppSecret = Configuration.GetConnectionString("FacebookSecret")
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
