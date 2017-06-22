@@ -97,6 +97,12 @@ namespace Bloometa
                 ClientSecret = Configuration.GetConnectionString("MicrosoftSecret")
             });
 
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = Configuration.GetConnectionString("GoogleKey"),
+                ClientSecret = Configuration.GetConnectionString("GoogleSecret")
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

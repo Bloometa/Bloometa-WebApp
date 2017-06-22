@@ -21,5 +21,8 @@ namespace Bloometa.Models
 
         public string MicrosoftKey { get; set; }
         public string MicrosoftSecret { get; set; }
+
+        public string GoogleKey { get; set; }
+        public string GoogleSecret { get; set; }
     }
 }
