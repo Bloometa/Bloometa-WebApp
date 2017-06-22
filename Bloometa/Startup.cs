@@ -79,6 +79,30 @@ namespace Bloometa
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
+            app.UseTwitterAuthentication(new TwitterOptions()
+            {
+                ConsumerKey = Configuration.GetConnectionString("TwitterKey"),
+                ConsumerSecret = Configuration.GetConnectionString("TwitterSecret")
+            });
+
+            app.UseFacebookAuthentication(new FacebookOptions()
+            {
+                AppId = Configuration.GetConnectionString("FacebookKey"),
+                AppSecret = Configuration.GetConnectionString("FacebookSecret")
+            });
+
+            app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
+            {
+                ClientId = Configuration.GetConnectionString("MicrosoftKey"),
+                ClientSecret = Configuration.GetConnectionString("MicrosoftSecret")
+            });
+
+            app.UseGoogleAuthentication(new GoogleOptions()
+            {
+                ClientId = Configuration.GetConnectionString("GoogleKey"),
+                ClientSecret = Configuration.GetConnectionString("GoogleSecret")
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
