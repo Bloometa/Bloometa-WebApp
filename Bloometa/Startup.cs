@@ -91,6 +91,12 @@ namespace Bloometa
                 AppSecret = Configuration.GetConnectionString("FacebookSecret")
             });
 
+            app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
+            {
+                ClientId = Configuration.GetConnectionString("MicrosoftKey"),
+                ClientSecret = Configuration.GetConnectionString("MicrosoftSecret")
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
