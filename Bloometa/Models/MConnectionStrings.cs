@@ -12,5 +12,8 @@ namespace Bloometa.Models
 
         public string SendGridUser { get; set; }
         public string SendGridKey { get; set; }
+
+        public string TwitterKey { get; set; }
+        public string TwitterSecret { get; set; }
     }
 }

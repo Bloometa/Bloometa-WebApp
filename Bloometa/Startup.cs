@@ -79,6 +79,12 @@ namespace Bloometa
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
+            app.UseTwitterAuthentication(new TwitterOptions()
+            {
+                ConsumerKey = Configuration.GetConnectionString("TwitterKey"),
+                ConsumerSecret = Configuration.GetConnectionString("TwitterSecret")
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
