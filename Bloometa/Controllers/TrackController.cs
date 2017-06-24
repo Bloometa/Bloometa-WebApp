@@ -78,6 +78,9 @@ namespace Bloometa.Controllers
                 return RedirectToAction("Index");
             }
 
+            List<int> RunningDifferenceFollowing = new List<int>();
+            List<int> RunningDifferenceFollowers = new List<int>();
+
             using (SqlConnection dbConn = new SqlConnection())
             {
                 dbConn.ConnectionString = Configuration.DB;
@@ -156,12 +159,17 @@ namespace Bloometa.Controllers
                             Model.Reporting[i].FollowerDifference = 0;
                         }
 
+                        RunningDifferenceFollowing.Add(Model.Reporting[i].FollowDifference);
+                        RunningDifferenceFollowers.Add(Model.Reporting[i].FollowerDifference);
+
                         i++;
                     }
                 }
             }
             
             Model.Reporting.Reverse();
+            Model.MonthTotalFollowers = RunningDifferenceFollowers.Sum();
+            Model.MonthTotalFollowing = RunningDifferenceFollowing.Sum();
             return View(Model);
         }
 

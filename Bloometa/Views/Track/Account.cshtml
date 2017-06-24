@@ -5,7 +5,7 @@
 
 <h1>Account: @Model.AccDetails.Username</h1>
 <p>Latest: @String.Format("{0:n0}", Model.Reporting[0].FollowCount) following, @String.Format("{0:n0}", Model.Reporting[0].FollowerCount) followers.</p>
-
+<p>Month to date: @String.Format("{0:n0}", Model.MonthTotalFollowing) following, @String.Format("{0:n0}", Model.MonthTotalFollowers) followers.</p>
 <!--
 <div class="latest-values">
     <div class="value followers">789</div>

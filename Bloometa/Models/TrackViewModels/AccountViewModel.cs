@@ -13,5 +13,8 @@ namespace Bloometa.Models.TrackViewModels
         public List<int> ReportingFollowers { get; set; }
         public List<int> ReportingFollowing { get; set; }
         public List<DateTime> ReportingDays { get; set; }
+
+        public int MonthTotalFollowers { get; set; }
+        public int MonthTotalFollowing { get; set; }
     }
 }
