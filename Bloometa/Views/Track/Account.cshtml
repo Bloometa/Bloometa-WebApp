@@ -4,7 +4,7 @@
 }
 
 <h1>Account: @Model.AccDetails.Username</h1>
-<p>Latest: @Model.Reporting[0].FollowerCount.ToString("N") Followers, @Model.Reporting[0].FollowCount.ToString("N") Following.</p>
+<p>Latest: @String.Format("{0:n0}", Model.Reporting[0].FollowCount) following, @String.Format("{0:n0}", Model.Reporting[0].FollowerCount) followers.</p>
 
 <!--
 <div class="latest-values">
@@ -25,7 +25,7 @@
                 labels: [@{
                     foreach (DateTime Item in Model.ReportingDays)
                     {
-                        <text>"@Item.ToString("MMMM dd")",</text>
+                        @: "@Item.ToString("MMMM dd")",
                     }
                 }],
                 datasets: [
@@ -36,7 +36,7 @@
                         data: [@{
                             foreach (int Item in Model.ReportingFollowing)
                             {
-                                <text>@Item,</text>
+                                @: @Item,
                             }
                         }]
                     },
@@ -47,7 +47,7 @@
                         data: [@{
                             foreach (int Item in Model.ReportingFollowers)
                             {
-                                <text>@Item,</text>
+                                @: @Item,
                             }
                         }]
                     }
@@ -57,7 +57,7 @@
                 //maintainAspectRatio: false,
                 title: {
                     display: true,
-                    text: "Followers vs Following"
+                    text: "Following vs Followers"
                 },
                 legend: {
                     display: true
@@ -79,15 +79,15 @@
     <table>
         <tr>
             <th>Ran at</th>
-            <th>Follow Count</th>
+            <th>Following Count</th>
             <th>Follower Count</th>
         </tr>
         @foreach (UData Item in Model.Reporting)
         {
             <tr>
                 <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
-                <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
-                <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+                <td>@String.Format("{0:n0}", Item.FollowCount) (@String.Format("{0:n0}", Item.FollowDifference))</td>
+                <td>@String.Format("{0:n0}", Item.FollowerCount) (@String.Format("{0:n0}", Item.FollowerDifference))</td>
             </tr>
         }
     </table>
