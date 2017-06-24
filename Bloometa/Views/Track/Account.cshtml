@@ -4,7 +4,7 @@
 }
 
 <h1>Account: @Model.AccDetails.Username</h1>
-<p>Latest: @Model.Reporting[0].FollowCount.ToString("N") Following, @Model.Reporting[0].FollowerCount.ToString("N") Followers.</p>
+<p>Latest: @String.Format("{0:n0}", Model.Reporting[0].FollowCount) following, @String.Format("{0:n0}", Model.Reporting[0].FollowerCount) followers.</p>
 
 <!--
 <div class="latest-values">
@@ -86,8 +86,8 @@
         {
             <tr>
                 <td>@Item.Run.ToString("MMMM dd, yyyy")</td>
-                <td>@Item.FollowCount.ToString("N") (@Item.FollowDifference)</td>
-                <td>@Item.FollowerCount.ToString("N") (@Item.FollowerDifference)</td>
+                <td>@String.Format("{0:n0}", Item.FollowCount) (@String.Format("{0:n0}", Item.FollowDifference))</td>
+                <td>@String.Format("{0:n0}", Item.FollowerCount) (@String.Format("{0:n0}", Item.FollowerDifference))</td>
             </tr>
         }
     </table>
