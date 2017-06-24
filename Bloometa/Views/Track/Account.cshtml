@@ -25,7 +25,7 @@
                 labels: [@{
                     foreach (DateTime Item in Model.ReportingDays)
                     {
-                        <text>"@Item.ToString("MMMM dd")",</text>
+                        @: "@Item.ToString("MMMM dd")",
                     }
                 }],
                 datasets: [
@@ -36,7 +36,7 @@
                         data: [@{
                             foreach (int Item in Model.ReportingFollowing)
                             {
-                                <text>@Item,</text>
+                                @: @Item,
                             }
                         }]
                     },
@@ -47,7 +47,7 @@
                         data: [@{
                             foreach (int Item in Model.ReportingFollowers)
                             {
-                                <text>@Item,</text>
+                                @: @Item,
                             }
                         }]
                     }
