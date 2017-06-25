@@ -15,10 +15,7 @@
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\socialtracker - Web Deploy.pubxml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\images\temp-logo.svg" />
-  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.1" />
