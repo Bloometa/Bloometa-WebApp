@@ -12,6 +12,8 @@ using Bloometa.Models;
 using Bloometa.Models.TrackViewModels;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Bloometa.Controllers
 {
@@ -187,7 +189,7 @@ namespace Bloometa.Controllers
         // POST: Track/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateViewModel Model, string Username, string Network)
+        public async Task<ActionResult> Create(CreateViewModel Model, string Username, string Network)
         {
             ViewData["NetworkOptions"] = NetworkOptions;
             using (SqlConnection dbConn = new SqlConnection())
@@ -225,36 +227,37 @@ namespace Bloometa.Controllers
                 switch (Network.ToLower())
                 {
                     case "instagram":
-                        using (WebClient wClient = new WebClient())
+                        HttpClient netClient = new HttpClient();
+                        netClient.DefaultRequestHeaders.Accept.Clear();
+                        netClient.DefaultRequestHeaders.Accept
+                            .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        HttpResponseMessage netResponse = await netClient.GetAsync(new Uri(String.Format("https://instagram.com/{0}/?__a=1", Username)));
+                        if (netResponse.IsSuccessStatusCode)
                         {
-                            // If this try completes successfully, the account exists
-                            try
+                            JToken netData = JObject.Parse(await netResponse.Content.ReadAsStringAsync()).SelectToken("user");
+
+                            FollowCount = Int32.Parse((string)netData.SelectToken("follows")
+                                .SelectToken("count"));
+                            FollowerCount = Int32.Parse((string)netData.SelectToken("followed_by")
+                                .SelectToken("count"));
+
+                            Username = (string)netData.SelectToken("username");
+                            UserFullName = (string)netData.SelectToken("full_name");
+                            UserID = (string)netData.SelectToken("id");
+                        }
+                        else
+                        {
+                            if (netResponse.StatusCode == HttpStatusCode.NotFound)
                             {
-                                var wcResponse = wClient.DownloadString(String.Format("https://instagram.com/{0}/?__a=1", Username));
-                                JToken wcData = JObject.Parse(wcResponse).SelectToken("user");
-
-                                FollowCount = Int32.Parse((string)wcData.SelectToken("follows")
-                                    .SelectToken("count"));
-                                FollowerCount = Int32.Parse((string)wcData.SelectToken("followed_by")
-                                    .SelectToken("count"));
-
-                                Username = (string)wcData.SelectToken("username");
-                                UserFullName = (string)wcData.SelectToken("full_name");
-                                UserID = (string)wcData.SelectToken("id");
+                                ViewData["AccResponse"] = "Could not find a user by that name.";
                             }
-                            catch (WebException e)
+                            else
                             {
-                                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.NotFound)
-                                {
-                                    ViewData["AccResponse"] = "Could not find a user by that name.";
-                                }
-                                else
-                                {
-                                    ViewData["AccResponse"] = "An unknown error occurred while connecting to Instagram.";
-                                }
-
-                                return View(Model);
+                                ViewData["AccResponse"] = "An unknown error occurred while connecting to Instagram.";
                             }
+
+                            return View(Model);
                         }
                         break;
                     case "twitter":
