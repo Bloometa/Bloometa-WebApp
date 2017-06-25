@@ -279,22 +279,9 @@ namespace Bloometa.Controllers
                             UserFullName = User.Name;
                             UserID = String.Format("{0}", User.Id);
                         }
-                        catch (WebException e)
-                        {
-                            if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.NotFound)
-                            {
-                                ViewData["AccResponse"] = "Could not find a user by that name.";
-                            }
-                            else
-                            {
-                                ViewData["AccResponse"] = "An unknown error occurred while connecting to Instagram.";
-                            }
-
-                            return View(Model);
-                        }
                         catch
                         {
-                            ViewData["AccResponse"] = "An unknown error occurred while connecting to Instagram.";
+                            ViewData["AccResponse"] = "Could not find a user by that name.";
                             return View(Model);
                         }
                         break;
