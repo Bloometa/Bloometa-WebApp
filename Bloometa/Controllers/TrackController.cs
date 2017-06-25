@@ -24,6 +24,7 @@ namespace Bloometa.Controllers
             Configuration = Cnf.Value;
 
             NetworkOptions.Add("Instagram");
+            NetworkOptions.Add("Twitter");
         }
 
         public ActionResult Index(IndexViewModel Model)
@@ -54,6 +55,9 @@ namespace Bloometa.Controllers
                             Account.Network = (string)results["Network"];
                             Account.Username = (string)results["Username"];
                             Account.Added = (DateTime)results["Added"];
+
+                            Account.Network =
+                                Char.ToUpper(Account.Network[0]) + Account.Network.Substring(1);
 
                             Model.Recent.Add(Account);
                         }
@@ -215,6 +219,7 @@ namespace Bloometa.Controllers
                 }
 
                 int FollowCount, FollowerCount;
+                string UserFullName, UserID;
 
                 // Validate the new user exists
                 switch (Network.ToLower())
@@ -232,6 +237,10 @@ namespace Bloometa.Controllers
                                     .SelectToken("count"));
                                 FollowerCount = Int32.Parse((string)wcData.SelectToken("followed_by")
                                     .SelectToken("count"));
+
+                                Username = (string)wcData.SelectToken("username");
+                                UserFullName = (string)wcData.SelectToken("full_name");
+                                UserID = (string)wcData.SelectToken("id");
                             }
                             catch (WebException e)
                             {
@@ -248,30 +257,106 @@ namespace Bloometa.Controllers
                             }
                         }
                         break;
+                    case "twitter":
+                        var TWCredentials = new Tweetinvi.Models.TwitterCredentials(
+                            Configuration.TwitterKey,
+                            Configuration.TwitterSecret,
+                            Configuration.TwitterAccessKey,
+                            Configuration.TwitterAccessSecret);
+
+                        Tweetinvi.Models.IUser User;
+                        try
+                        {
+                            User = Tweetinvi.Auth.ExecuteOperationWithCredentials(TWCredentials, () =>
+                            {
+                                return Tweetinvi.User.GetUserFromScreenName(Username);
+                            });
+
+                            FollowCount = User.FriendsCount;
+                            FollowerCount = User.FollowersCount;
+
+                            Username = User.ScreenName;
+                            UserFullName = User.Name;
+                            UserID = String.Format("{0}", User.Id);
+                        }
+                        catch
+                        {
+                            ViewData["AccResponse"] = "Could not find a user by that name.";
+                            return View(Model);
+                        }
+                        break;
                     default:
                         ViewData["AccResponse"] = "Invalid network selected.";
                         return View(Model);
                 }
 
+                SqlCommand CheckAccountID =
+                    new SqlCommand(@"
+                        SELECT TOP(1) [AccID]
+                        FROM UAccounts
+                        WHERE
+                            [UserID] = @UserID
+                            AND [Network] = @Network
+                            AND [Removed] = 0", dbConn);
+                CheckAccountID.Parameters.Add("@UserID", SqlDbType.NVarChar).Value = UserID;
+                CheckAccountID.Parameters.Add("@Network", SqlDbType.NVarChar).Value = Network.ToLower();
+
+                string AccID = null;
+                using (SqlDataReader results = CheckAccountID.ExecuteReader())
+                {
+                    // If the users ID already exists, they probably changed their
+                    // handle, so just update that here so the historical tracking
+                    // data remains available
+                    if (results.HasRows)
+                    {
+                        while (results.Read())
+                        {
+                            AccID = results["AccID"].ToString();
+                        }
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(AccID))
+                {
+                    using (SqlCommand UpdateAccount = new SqlCommand(@"
+                        UPDATE UAccounts
+                        SET
+                            Username = @Username,
+                            FullName = @FullName
+                        WHERE
+                            AccID = @AccID
+                            AND [Removed] = 0", dbConn))
+                    {
+                        UpdateAccount.Parameters.Add("@AccID", SqlDbType.UniqueIdentifier).Value = new Guid(AccID);
+                        UpdateAccount.Parameters.Add("@Username", SqlDbType.NVarChar).Value = Username;
+                        UpdateAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = UserFullName;
+
+                        UpdateAccount.ExecuteNonQuery();
+
+                        return RedirectToAction("Account", new { ID = AccID });
+                    }
+                }
+                
                 // Everything is all good so far! Add the account to DB to be tracked
-                using(SqlCommand InsertAccount = new SqlCommand(@"
+                using (SqlCommand InsertAccount = new SqlCommand(@"
                     INSERT INTO UAccounts
-                        ([Username], [Network])
+                        ([Network], [Username], [UserID], [FullName])
                         OUTPUT INSERTED.[AccID]
                     VALUES
-                        (@Username, @Network)", dbConn))
+                        (@Network, @Username, @UserID, @FullName)", dbConn))
                 {
-                    InsertAccount.Parameters.Add("@Username", SqlDbType.NVarChar).Value = Username;
                     InsertAccount.Parameters.Add("@Network", SqlDbType.NVarChar).Value = Network.ToLower();
+                    InsertAccount.Parameters.Add("@Username", SqlDbType.NVarChar).Value = Username;
+                    InsertAccount.Parameters.Add("@UserID", SqlDbType.NVarChar).Value = UserID;
+                    InsertAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = UserFullName;
 
-                    Guid AccID = new Guid();
                     using (SqlDataReader results = InsertAccount.ExecuteReader())
                     {
                         if (results.HasRows)
                         {
                             while (results.Read())
                             {
-                                AccID = (Guid)results["AccID"];
+                                AccID = results["AccID"].ToString();
                             }
                         }
                         else
@@ -283,7 +368,7 @@ namespace Bloometa.Controllers
 
                     // May as well insert the data we got earlier, rather than waste a net request.
                     // No need to manually enqueue, in this case.
-                    if (AccID.ToString() != "00000000-0000-0000-0000-000000000000")
+                    if (!String.IsNullOrEmpty(AccID))
                     {
                         using (SqlCommand InsertDataRow = new SqlCommand(@"
                             INSERT INTO UData
@@ -291,7 +376,7 @@ namespace Bloometa.Controllers
                             VALUES
                                 (@AccID, @FollowCount, @FollowerCount)", dbConn))
                         {
-                            InsertDataRow.Parameters.Add("@AccID", SqlDbType.UniqueIdentifier).Value = AccID;
+                            InsertDataRow.Parameters.Add("@AccID", SqlDbType.UniqueIdentifier).Value = new Guid(AccID);
                             InsertDataRow.Parameters.Add("@FollowCount", SqlDbType.Int).Value = FollowCount;
                             InsertDataRow.Parameters.Add("@FollowerCount", SqlDbType.Int).Value = FollowerCount;
 
