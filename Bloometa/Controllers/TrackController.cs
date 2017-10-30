@@ -332,7 +332,8 @@ namespace Bloometa.Controllers
                     {
                         UpdateAccount.Parameters.Add("@AccID", SqlDbType.UniqueIdentifier).Value = new Guid(AccID);
                         UpdateAccount.Parameters.Add("@Username", SqlDbType.NVarChar).Value = Username;
-                        UpdateAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = UserFullName;
+                        UpdateAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value =
+                            String.IsNullOrEmpty(UserFullName) ? Username : UserFullName;
 
                         UpdateAccount.ExecuteNonQuery();
 
@@ -351,7 +352,8 @@ namespace Bloometa.Controllers
                     InsertAccount.Parameters.Add("@Network", SqlDbType.NVarChar).Value = Network.ToLower();
                     InsertAccount.Parameters.Add("@Username", SqlDbType.NVarChar).Value = Username;
                     InsertAccount.Parameters.Add("@UserID", SqlDbType.NVarChar).Value = UserID;
-                    InsertAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = UserFullName;
+                    InsertAccount.Parameters.Add("@FullName", SqlDbType.NVarChar).Value =
+                        String.IsNullOrEmpty(UserFullName) ? Username : UserFullName;
 
                     using (SqlDataReader results = InsertAccount.ExecuteReader())
                     {
